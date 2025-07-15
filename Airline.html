@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shaik Airline Services – Book Flights Online</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0d6efd;
+      --secondary: #6610f2;
+      --success: #198754;
+      --danger: #dc3545;
+      --dark: #212529;
+      --light: #f8f9fa;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+    body { background: var(--light); color: var(--dark); }
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    header h1 { font-size: 1.6rem; letter-spacing: 1px; }
+    nav button {
+      background: #fff;
+      color: var(--primary);
+      border: none;
+      padding: 0.5rem 1rem;
+      margin-left: 1rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    nav button:hover { transform: translateY(-2px); }
+    main { max-width: 1100px; margin: 2rem auto; padding: 1rem; }
+    /* Sections */
+    .section { display: none; animation: fade 0.4s ease-in-out forwards; }
+    .section.active { display: block; }
+    @keyframes fade { from {opacity:0} to {opacity:1} }
+    /* Card + Form */
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .card h2 { margin-bottom: 1rem; text-align: center; }
+    .input-group { margin-bottom: 1rem; display: flex; flex-direction: column; }
+    .input-group label { margin-bottom: 0.3rem; font-size: 0.9rem; }
+    .input-group input, .input-group select {
+      padding: 0.6rem 0.8rem;
+      border-radius: var(--radius);
+      border: 1px solid #ced4da;
+      font-size: 1rem;
+    }
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--primary);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: var(--secondary); }
+    /* Table */
+    table { width:100%; border-collapse: collapse; margin-top:1rem; }
+    th,td { padding:0.75rem 1rem; border-bottom:1px solid #dee2e6; text-align:left; }
+    th { background: var(--primary); color:#fff; }
+    tr:hover { background: rgba(13,110,253,0.05); }
+    /* Toast */
+    #toast {
+      position: fixed; bottom:1rem; right:1rem; background: var(--success); color:#fff; padding:0.75rem 1.25rem; border-radius: var(--radius); opacity:0; pointer-events:none; transition:opacity 0.4s;
+    }
+    #toast.show { opacity:1; }
+    @media(max-width:600px){ header h1{font-size:1.3rem;} nav button{padding:0.4rem 0.75rem;} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Shaik Airline Services</h1>
+    <nav>
+      <button id="nav-login">Login</button>
+      <button id="nav-signup">Sign Up</button>
+      <button id="nav-book">Book Flight</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Login -->
+    <section id="login-section" class="section active">
+      <div class="card">
+        <h2>Login</h2>
+        <div class="input-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="you@example.com" required />
+        </div>
+        <div class="input-group">
+          <label for="login-phone">Phone Number</label>
+          <input type="tel" id="login-phone" placeholder="+91‑9876543210" required />
+        </div>
+        <div class="input-group">
+          <label for="login-pass">Password</label>
+          <input type="password" id="login-pass" placeholder="•••••••" required />
+        </div>
+        <button class="btn" onclick="login()">Login</button>
+      </div>
+    </section>
+
+    <!-- Sign Up -->
+    <section id="signup-section" class="section">
+      <div class="card">
+        <h2>Create Account</h2>
+        <div class="input-group">
+          <label for="sign-name">Full Name</label>
+          <input type="text" id="sign-name" placeholder="Your name" required />
+        </div>
+        <div class="input-group">
+          <label for="sign-email">Email</label>
+          <input type="email" id="sign-email" placeholder="you@example.com" required />
+        </div>
+        <div class="input-group">
+          <label for="sign-phone">Phone Number</label>
+          <input type="tel" id="sign-phone" placeholder="+91‑9876543210" required />
+        </div>
+        <div class="input-group">
+          <label for="sign-pass">Password</label>
+          <input type="password" id="sign-pass" placeholder="Create password" required />
+        </div>
+        <button class="btn" onclick="signup()">Sign Up</button>
+      </div>
+    </section>
+
+    <!-- Booking -->
+    <section id="book-section" class="section">
+      <div class="card" style="max-width:100%">
+        <h2>Book Your Flight</h2>
+        <div class="input-group">
+          <label for="from">From</label>
+          <input type="text" id="from" placeholder="City or Airport" />
+        </div>
+        <div class="input-group">
+          <label for="to">To</label>
+          <input type="text" id="to" placeholder="Destination" />
+        </div>
+        <div class="input-group">
+          <label for="date">Date</label>
+          <input type="date" id="date" />
+        </div>
+        <button class="btn" onclick="searchFlights()">Search Flights</button>
+        <div id="results"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast"></div>
+
+  <script>
+    // Initial user
+    let user = JSON.parse(localStorage.getItem('sas_user')) || null;
+    // Global flight catalogue (sample prices in ₹)
+    const flights = [
+      {airline:'IndiGo',price:5500,duration:'2h 30m'},
+      {airline:'Qatar Airways',price:21500,duration:'4h 10m'},
+      {airline:'Air India',price:8000,duration:'2h 45m'},
+      {airline:'Emirates',price:24000,duration:'4h 20m'},
+      {airline:'SpiceJet',price:6000,duration:'2h 35m'},
+      {airline:'Lufthansa',price:35000,duration:'8h 15m'},
+      {airline:'Singapore Airlines',price:38000,duration:'5h 50m'},
+      {airline:'British Airways',price:33000,duration:'9h 05m'},
+      {airline:'United Airlines',price:42000,duration:'14h 00m'},
+      {airline:'Delta Air Lines',price:41000,duration:'13h 45m'},
+      {airline:'American Airlines',price:40500,duration:'14h 10m'},
+      {airline:'Cathay Pacific',price:36000,duration:'6h 05m'},
+      {airline:'Etihad Airways',price:26500,duration:'3h 50m'},
+      {airline:'Turkish Airlines',price:29500,duration:'7h 30m'},
+      {airline:'ANA',price:44000,duration:'9h 40m'},
+      {airline:'Air France',price:33500,duration:'8h 20m'},
+      {airline:'KLM',price:33200,duration:'8h 25m'}
+    ];
+
+    // Sections
+    const sections = {
+      login: document.getElementById('login-section'),
+      signup: document.getElementById('signup-section'),
+      book: document.getElementById('book-section')
+    };
+    document.getElementById('nav-login').onclick=()=>show('login');
+    document.getElementById('nav-signup').onclick=()=>show('signup');
+    document.getElementById('nav-book').onclick=()=>{
+      if(!user){showToast('Please login first!',true);show('login');return;}
+      show('book');
+    };
+    function show(name){ Object.values(sections).forEach(s=>s.classList.remove('active')); sections[name].classList.add('active'); }
+
+    // Auth
+    function signup(){
+      const name=document.getElementById('sign-name').value.trim();
+      const email=document.getElementById('sign-email').value.trim();
+      const phone=document.getElementById('sign-phone').value.trim();
+      const pass=document.getElementById('sign-pass').value;
+      if(!name||!email||!phone||!pass){showToast('Please fill all fields',true);return;}
+      user={name,email,phone};
+      localStorage.setItem('sas_user',JSON.stringify(user));
+      showToast('Account created!');
+      show('book');
+    }
+    function login(){
+      const email=document.getElementById('login-email').value.trim();
+      const phone=document.getElementById('login-phone').value.trim();
+      const pass=document.getElementById('login-pass').value;
+      if(!email||!phone||!pass){showToast('Enter all credentials',true);return;}
+      user={email,phone};
+      localStorage.setItem('sas_user',JSON.stringify(user));
+      showToast('Logged in!');
+      show('book');
+    }
+
+    // Flight search
+    function searchFlights(){
+      const from=document.getElementById('from').value.trim();
+      const to=document.getElementById('to').value.trim();
+      const date=document.getElementById('date').value;
+      if(!from||!to||!date){showToast('Enter all search details',true);return;}
+      const resultsEl=document.getElementById('results');
+      let html='<table><thead><tr><th>Airline</th><th>Duration</th><th>Price (₹)</th><th></th></tr></thead><tbody>';
+      flights.forEach(f=>{html+=`<tr><td>${f.airline}</td><td>${f.duration}</td><td>₹${f.price.toLocaleString()}</td><td><button class='btn' onclick="bookFlight('${f.airline}',${f.price})">Book</button></td></tr>`});
+      html+='</tbody></table>';
+      resultsEl.innerHTML=html;
+    }
+    function bookFlight(airline,price){
+      showToast(`Booked ${airline} flight for ₹${price.toLocaleString()}. Confirmation sent to ${user.phone || 'your phone'}`);
+    }
+
+    // Toast helper
+    function showToast(msg,error=false){
+      const t=document.getElementById('toast');
+      t.textContent=msg;
+      t.style.background=error?'var(--danger)':'var(--success)';
+      t.classList.add('show');
+      clearTimeout(t._timeout);
+      t._timeout=setTimeout(()=>t.classList.remove('show'),4000);
+    }
+
+    // Auto-login
+    if(user){show('book');}
+  </script>
+</body>
+</html>
